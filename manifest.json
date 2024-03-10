@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "My Chrome Extension",
+  "name": "Simple Dictionary",
   "version": "1.0",
-  "description": "Description of your extension",
+  "description": "A simple dictionary for your web browser",
   "permissions": ["activeTab"],
   "host_permissions": ["<all_urls>"],
   "icons": {

@@ -1,5 +1,6 @@
 document.addEventListener("mouseup", function (event) {
   let selection = window.getSelection().toString();
+  let isPopupVisible = false;
 
   const getMeaning = async (word) => {
     try {
@@ -21,7 +22,12 @@ document.addEventListener("mouseup", function (event) {
   };
 
   const showMeaning = () => {
-    if (selection && selection.length > 0 && selection !== " ") {
+    if (
+      selection &&
+      selection.length > 0 &&
+      selection !== " " &&
+      !isPopupVisible
+    ) {
       getMeaning(selection).then((meaning) => {
         // Create the popup element
         const popup = document.createElement("div");
@@ -37,6 +43,7 @@ document.addEventListener("mouseup", function (event) {
         popup.style.borderRadius = "5px";
         popup.style.boxShadow = "0 2px 5px rgba(0, 0, 0, 0.1)";
         popup.style.zIndex = "9999";
+        isPopupVisible = true;
 
         // Calculate the position of the popup
         const rect = window
@@ -55,6 +62,11 @@ document.addEventListener("mouseup", function (event) {
         popup.style.left = `${left}px`;
 
         document.body.appendChild(popup);
+
+        popup.addEventListener("click", () => {
+          isPopupVisible = false;
+          popup.remove();
+        });
 
         setTimeout(() => {
           popup.remove();
