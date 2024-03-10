@@ -30,20 +30,23 @@ document.addEventListener("mouseup", function (event) {
     ) {
       getMeaning(selection).then((meaning) => {
         // Create the popup element
+        isPopupVisible = true;
         const popup = document.createElement("div");
         popup.textContent = `${selection}: ${meaning?.definition} \n ${
           meaning?.example ? "Example: " + meaning?.example : ""
         }`;
         popup.style.position = "absolute";
         popup.style.maxWidth = "200px";
-        popup.style.padding = "10px";
-        popup.style.backgroundColor = "#fff";
-        popup.style.color = "#333";
-        popup.style.border = "1px solid #ccc";
-        popup.style.borderRadius = "5px";
-        popup.style.boxShadow = "0 2px 5px rgba(0, 0, 0, 0.1)";
+        popup.style.padding = "20px";
+        popup.style.backgroundColor = "rgba(0, 0, 0, 0.8)"; // Semi-transparent dark background
+        popup.style.color = "#f9f9f9"; // Light text color for contrast
+        popup.style.border = "1px solid rgba(255, 255, 255, 0.1)"; // Semi-transparent border
+        popup.style.borderRadius = "10px"; // Rounded corners
+        popup.style.boxShadow =
+          "0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)"; // Soft box shadow
         popup.style.zIndex = "9999";
-        isPopupVisible = true;
+        popup.style.opacity = "0"; // Initially hidden
+        popup.style.transition = "opacity 0.3s ease-in-out"; // Smooth fade-in animation
 
         // Calculate the position of the popup
         const rect = window
@@ -61,6 +64,11 @@ document.addEventListener("mouseup", function (event) {
         popup.style.top = `${top}px`;
         popup.style.left = `${left}px`;
 
+        // Smoothly fade in the popup
+        setTimeout(() => {
+          popup.style.opacity = "1";
+        }, 100);
+
         document.body.appendChild(popup);
 
         popup.addEventListener("click", () => {
@@ -76,8 +84,11 @@ document.addEventListener("mouseup", function (event) {
   };
 
   const handleKeydown = (event) => {
-    if (event.key === "d" || event.key === "D") {
-      event.preventDefault();
+    if (
+      (event.key === "d" || event.key === "D") &&
+      !isPopupVisible &&
+      selection.length > 0
+    ) {
       showMeaning();
     }
   };
